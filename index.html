@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PolicyLens — Enterprise AI Policy Comparator & Compliance Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="dark-theme">
+  <!-- BACKGROUND AMBIENT GLOW -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+
+  <div class="app-layout">
+    <!-- TOP NAVIGATION -->
+    <header class="app-header">
+      <div class="header-container">
+        <div class="brand-group">
+          <div class="brand-logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <span class="brand-name">Policy<span class="highlight">Lens</span></span>
+            <span class="brand-sub">Compliance & Policy Diff Intelligence</span>
+          </div>
+        </div>
+
+        <div class="header-badges">
+          <span class="pulse-indicator">
+            <span class="pulse-dot"></span>
+            NLP Engine Active
+          </span>
+          <span class="status-pill">v2.0 Enterprise</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN WRAPPER -->
+    <main class="main-content">
+      <!-- HERO & DEMO PRESET SELECTOR -->
+      <section class="hero-section">
+        <div class="hero-tag">AI-Assisted Contract & Policy Audit</div>
+        <h1 class="hero-title">Compare Policy Revisions with <span class="gradient-text">Evidence-Backed Precision</span></h1>
+        <p class="hero-desc">Automatically align contractual clauses, detect fine-print modifications, compute numerical & fee deltas, and evaluate compliance risk in seconds.</p>
+        
+        <!-- 1-CLICK DEMO SCENARIOS FOR JUDGES -->
+        <div class="presets-shelf">
+          <div class="shelf-label">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            <span>1-Click Hackathon Scenarios:</span>
+          </div>
+          <div class="preset-buttons" id="presetButtons">
+            <button class="preset-chip active" data-preset="hr_policy">
+              <span class="chip-icon">🏢</span>
+              <span class="chip-title">Corporate HR & WFH Policy</span>
+              <span class="chip-tag">Probation & Stipends</span>
+            </button>
+            <button class="preset-chip" data-preset="scholarship">
+              <span class="chip-icon">🎓</span>
+              <span class="chip-title">University Merit Scholarship</span>
+              <span class="chip-tag">GPA & Tuition Waivers</span>
+            </button>
+            <button class="preset-chip" data-preset="fintech_loan">
+              <span class="chip-icon">💳</span>
+              <span class="chip-title">Fintech Loan & Credit Terms</span>
+              <span class="chip-tag">APR & Late Fees</span>
+            </button>
+            <button class="preset-chip" data-preset="saas_privacy">
+              <span class="chip-icon">☁️</span>
+              <span class="chip-title">Cloud SaaS TOS & Privacy</span>
+              <span class="chip-tag">AI Training & Retention</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- INPUT SECTION (FILE UPLOAD OR DIRECT TEXT EDITOR) -->
+      <section class="comparator-input-card">
+        <div class="input-card-header">
+          <div class="tab-switcher">
+            <button id="tabFiles" class="tab-btn active">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              Upload Documents (.PDF / .TXT / .MD)
+            </button>
+            <button id="tabText" class="tab-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+              Direct Text Editor Mode
+            </button>
+          </div>
+          <div class="input-meta-info" id="scenarioIndicator">
+            <span class="loaded-scenario-text">Loaded Scenario: <strong>Corporate HR & Hybrid Work Policy</strong></span>
+          </div>
+        </div>
+
+        <!-- TAB 1: FILE UPLOADER -->
+        <div id="fileUploadContainer" class="tab-content active">
+          <div class="upload-grid">
+            <!-- OLD DOCUMENT UPLOAD -->
+            <div class="upload-dropzone" id="dropzoneOld">
+              <div class="zone-badge">Baseline Version 1.0</div>
+              <input type="file" id="oldFileInput" accept=".pdf,.txt,.md,.json">
+              <div class="zone-content">
+                <div class="zone-icon">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+                </div>
+                <div class="zone-title">Select or Drop Previous Policy</div>
+                <div class="zone-hint">Supports PDF, TXT, Markdown, JSON</div>
+                <div class="file-pill" id="oldFilePill">
+                  <span class="file-pill-name" id="oldFileName">Old_Policy_Version_1.txt</span>
+                  <span class="file-pill-size" id="oldFileSize">Sample Ready</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- NEW DOCUMENT UPLOAD -->
+            <div class="upload-dropzone" id="dropzoneNew">
+              <div class="zone-badge badge-new">Proposed Version 2.0</div>
+              <input type="file" id="newFileInput" accept=".pdf,.txt,.md,.json">
+              <div class="zone-content">
+                <div class="zone-icon icon-new">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><path d="M12 11v6"></path><path d="M9 14h6"></path></svg>
+                </div>
+                <div class="zone-title">Select or Drop Revised Policy</div>
+                <div class="zone-hint">Supports PDF, TXT, Markdown, JSON</div>
+                <div class="file-pill" id="newFilePill">
+                  <span class="file-pill-name" id="newFileName">New_Policy_Version_2.txt</span>
+                  <span class="file-pill-size" id="newFileSize">Sample Ready</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: SPLIT TEXTAREA EDITOR -->
+        <div id="textEditorContainer" class="tab-content">
+          <div class="editor-grid">
+            <div class="editor-pane">
+              <div class="pane-header">
+                <span>Baseline Document (Version 1.0)</span>
+                <span class="char-count" id="oldCharCount">0 chars</span>
+              </div>
+              <textarea id="rawOldText" placeholder="Paste baseline policy text here..."></textarea>
+            </div>
+            <div class="editor-pane">
+              <div class="pane-header">
+                <span>Revised Document (Version 2.0)</span>
+                <span class="char-count" id="newCharCount">0 chars</span>
+              </div>
+              <textarea id="rawNewText" placeholder="Paste revised policy text here..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- EXECUTE ACTION BAR -->
+        <div class="action-footer">
+          <button id="compareBtn" class="btn-primary-glow">
+            <span class="btn-icon">⚡</span>
+            <span class="btn-text">Run Deep Policy Comparison & Risk Analysis</span>
+          </button>
+        </div>
+
+        <!-- ERROR NOTIFICATION -->
+        <div id="errorMessage" class="error-banner hidden"></div>
+      </section>
+
+      <!-- LOADING STATE -->
+      <section id="loadingState" class="loading-container hidden">
+        <div class="radar-spinner">
+          <div class="radar-circle"></div>
+          <div class="radar-circle"></div>
+          <div class="radar-scan"></div>
+        </div>
+        <div class="loading-title">Analyzing Policy Semantics...</div>
+        <div class="loading-steps">
+          <span class="step-badge">Segmenting Clauses</span>
+          <span class="step-badge">Extracting Financial Entities</span>
+          <span class="step-badge">Evaluating Criticality & Strictness</span>
+        </div>
+      </section>
+
+      <!-- RESULTS DASHBOARD -->
+      <section id="resultsSection" class="results-dashboard hidden">
+        
+        <!-- TOP EXECUTIVE VOLATILITY & IMPACT SCORECARD -->
+        <div class="dashboard-scorecard">
+          <!-- Volatility Gauge -->
+          <div class="scorecard-main">
+            <div class="score-header">
+              <span class="score-label">Policy Volatility Index</span>
+              <span class="strictness-badge" id="strictnessBadge">Strictness Increased 🔺</span>
+            </div>
+            <div class="score-gauge-wrap">
+              <div class="volatility-number" id="volatilityScore">72</div>
+              <div class="volatility-scale">
+                <div class="scale-bar">
+                  <div class="scale-fill" id="volatilityFill" style="width: 72%;"></div>
+                </div>
+                <div class="scale-labels">
+                  <span>0 (Low Impact)</span>
+                  <span>50 (Moderate)</span>
+                  <span>100 (High Risk)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick KPI Counters -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <span class="kpi-num" id="totalChanges">0</span>
+              <span class="kpi-label">Total Changes</span>
+            </div>
+            <div class="kpi-card kpi-critical">
+              <span class="kpi-num text-critical" id="highRiskCount">0</span>
+              <span class="kpi-label">High Risk Items</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-num text-amber" id="modifiedCount">0</span>
+              <span class="kpi-label">Modified Clauses</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-num text-emerald" id="addedCount">0</span>
+              <span class="kpi-label">New Additions</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-num text-rose" id="removedCount">0</span>
+              <span class="kpi-label">Decommissioned</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- EXECUTIVE AI BRIEFING & ACTIONABLE RECOMMENDATIONS -->
+        <div class="executive-briefing-card">
+          <div class="briefing-header">
+            <div class="briefing-title-group">
+              <div class="briefing-icon">⚡</div>
+              <div>
+                <h3>Executive Intelligence Briefing & Key Takeaways</h3>
+                <p>Synthesized AI summary of high-priority contractual and operational shifts.</p>
+              </div>
+            </div>
+            <div class="export-actions">
+              <button id="btnExportCsv" class="btn-outline">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Export CSV Audit
+              </button>
+              <button id="btnPrintReport" class="btn-outline">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                Print / Export PDF
+              </button>
+            </div>
+          </div>
+
+          <div class="briefing-body-grid">
+            <!-- Critical Takeaways List -->
+            <div class="briefing-column">
+              <h4>🚨 High-Priority Takeaways</h4>
+              <div id="executiveTakeaways" class="takeaways-list"></div>
+            </div>
+
+            <!-- Stakeholders & Action Items -->
+            <div class="briefing-column">
+              <h4>👥 Impacted Stakeholders</h4>
+              <div id="stakeholderTags" class="stakeholder-tags"></div>
+
+              <h4 style="margin-top: 18px;">🎯 Recommended Action Items</h4>
+              <ul id="actionItemsList" class="action-list"></ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- INTERACTIVE CONTROLS & FILTER TOOLBAR -->
+        <div class="filter-sticky-toolbar">
+          <div class="search-box">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="searchInput" placeholder="Search clause text, title, or value shifts...">
+          </div>
+
+          <!-- Category Chips -->
+          <div class="filter-group">
+            <span class="filter-label">Category:</span>
+            <div class="filter-chips" id="categoryChips">
+              <button class="chip active" data-filter="all">All</button>
+              <button class="chip" data-filter="Financial">💰 Financial</button>
+              <button class="chip" data-filter="Timeline">⏳ Timeline</button>
+              <button class="chip" data-filter="Eligibility">⚖️ Eligibility</button>
+              <button class="chip" data-filter="Legal & Governance">🛡️ Legal</button>
+              <button class="chip" data-filter="Operational">📋 Operational</button>
+            </div>
+          </div>
+
+          <!-- Risk Chips -->
+          <div class="filter-group">
+            <span class="filter-label">Risk:</span>
+            <div class="filter-chips" id="riskChips">
+              <button class="chip active" data-risk="all">All</button>
+              <button class="chip chip-high" data-risk="High">🔴 High</button>
+              <button class="chip chip-med" data-risk="Medium">🟡 Medium</button>
+              <button class="chip chip-fav" data-risk="Favorable">🟢 Favorable</button>
+              <button class="chip" data-risk="Low">⚪ Low</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- MULTI-VIEW TAB SWITCHER -->
+        <div class="view-mode-bar">
+          <div class="view-tabs">
+            <button class="view-tab active" data-view="sideBySide">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="18" rx="1"></rect><rect x="13" y="3" width="8" height="18" rx="1"></rect></svg>
+              Side-by-Side Clause Diff
+            </button>
+            <button class="view-tab" data-view="unifiedRedline">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="12" x2="9" y2="12"></line><line x1="21" y1="18" x2="7" y2="18"></line></svg>
+              Unified Redline Stream
+            </button>
+            <button class="view-tab" data-view="changeMatrix">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+              Structured Change Matrix
+            </button>
+            <button class="view-tab" data-view="deltasLedger">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              Numerical & Delta Ledger
+            </button>
+          </div>
+          <div class="view-stats-summary" id="showingCount">Showing all clauses</div>
+        </div>
+
+        <!-- VIEW PANELS -->
+
+        <!-- 1. SIDE-BY-SIDE VIEW -->
+        <div id="viewSideBySide" class="view-panel active">
+          <div id="clauseCardsContainer" class="clause-cards-container"></div>
+        </div>
+
+        <!-- 2. UNIFIED REDLINE VIEW -->
+        <div id="viewUnifiedRedline" class="view-panel">
+          <div id="unifiedRedlineContainer" class="unified-redline-container"></div>
+        </div>
+
+        <!-- 3. STRUCTURED CHANGE MATRIX VIEW -->
+        <div id="viewChangeMatrix" class="view-panel">
+          <div class="table-card">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width: 22%;">Section / Clause</th>
+                  <th style="width: 12%;">Category</th>
+                  <th style="width: 10%;">Status</th>
+                  <th style="width: 12%;">Risk Severity</th>
+                  <th style="width: 44%;">Executive Evidence & Summary</th>
+                </tr>
+              </thead>
+              <tbody id="changeMatrixBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 4. NUMERICAL & DELTA LEDGER VIEW -->
+        <div id="viewDeltasLedger" class="view-panel">
+          <div class="table-card">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Entity Type</th>
+                  <th>Baseline Value (v1.0)</th>
+                  <th></th>
+                  <th>Revised Value (v2.0)</th>
+                  <th>Direction & Shift</th>
+                  <th>Mathematical Delta</th>
+                </tr>
+              </thead>
+              <tbody id="deltasLedgerBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="app-footer">
+      <div class="footer-container">
+        <div><strong>PolicyLens</strong> — Intelligent Contract Diff Engine for Hackathon Problem #20</div>
+        <div>Engineered with Deterministic NLP Alignment, Entity Extraction & Strictness Scoring</div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JAVASCRIPT APP LOGIC -->
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
